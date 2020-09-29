@@ -9,10 +9,6 @@ import json
 
 from kostal import const
 
-import logging
-
-LOG = logging.getLogger(__name__)
-
 DXS_ENDPOINT = "/api/dxs.json"
 LOG_DATA_ENDPOINT = "/LogDaten.dat"
 
@@ -62,7 +58,6 @@ class DxsResponse:
         self.__dxs_entries = list(map(DxsEntry.from_json, dxsEntries))
         self.__session = DxsSessionData.from_json(session)
         self.status = DxsStatus.from_json(status)
-        print(self.status.code)
 
     def get_entry_by_id(self, dxs_id: int):
         for i in self.__dxs_entries:
