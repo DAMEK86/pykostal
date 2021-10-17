@@ -67,6 +67,11 @@ Home = {
     'operatingStatus': 16780032,
 }
 
+SettingsGeneral = {
+    'InverterName': 16777984,
+    'InverterMake': 16780544
+}
+
 InfoVersions = {
     'VersionUI': 16779267,
     'VersionFW': 16779265,
