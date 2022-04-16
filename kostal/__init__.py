@@ -210,6 +210,174 @@ class Piko:
         return (await self.fetch_props(ActualGrid.GRID_POWER_L3)) \
             .get_entry_by_id(ActualGrid.GRID_POWER_L3)
 
+    async def home_consumption_solar(self) -> DxsEntry:
+        return (await self.fetch_props(ActualHome.ACT_HOME_CONSUMPTION_SOLAR)) \
+            .get_entry_by_id(ActualHome.ACT_HOME_CONSUMPTION_SOLAR)
+
+    async def home_consumption_battery(self) -> DxsEntry:
+        return (await self.fetch_props(ActualHome.ACT_HOME_CONSUMPTION_BATTERY)) \
+            .get_entry_by_id(ActualHome.ACT_HOME_CONSUMPTION_BATTERY)
+
+    async def home_consumption_grid(self) -> DxsEntry:
+        return (await self.fetch_props(ActualHome.ACT_HOME_CONSUMPTION_GRID)) \
+            .get_entry_by_id(ActualHome.ACT_HOME_CONSUMPTION_GRID)
+
+    async def home_phase_consumption_l1(self) -> DxsEntry:
+        return (await self.fetch_props(ActualHome.PHASE_SELECTIVE_CONSUMPTION_L1)) \
+            .get_entry_by_id(ActualHome.PHASE_SELECTIVE_CONSUMPTION_L1)
+
+    async def home_phase_consumption_l2(self) -> DxsEntry:
+        return (await self.fetch_props(ActualHome.PHASE_SELECTIVE_CONSUMPTION_L2)) \
+            .get_entry_by_id(ActualHome.PHASE_SELECTIVE_CONSUMPTION_L2)
+
+    async def home_phase_consumption_l3(self) -> DxsEntry:
+        return (await self.fetch_props(ActualHome.PHASE_SELECTIVE_CONSUMPTION_L3)) \
+            .get_entry_by_id(ActualHome.PHASE_SELECTIVE_CONSUMPTION_L3)
+
+    async def generator_dc_1_voltage(self) -> DxsEntry:
+        return (await self.fetch_props(ActualGenerator.DC_1_VOLTAGE)) \
+            .get_entry_by_id(ActualGenerator.DC_1_VOLTAGE)
+
+    async def generator_dc_1_current(self) -> DxsEntry:
+        return (await self.fetch_props(ActualGenerator.DC_1_CURRENT)) \
+            .get_entry_by_id(ActualGenerator.DC_1_CURRENT)
+
+    async def generator_dc_1_power(self) -> DxsEntry:
+        return (await self.fetch_props(ActualGenerator.DC_1_POWER)) \
+            .get_entry_by_id(ActualGenerator.DC_1_POWER)
+
+    async def generator_dc_2_voltage(self) -> DxsEntry:
+        return (await self.fetch_props(ActualGenerator.DC_2_VOLTAGE)) \
+            .get_entry_by_id(ActualGenerator.DC_2_VOLTAGE)
+
+    async def generator_dc_2_current(self) -> DxsEntry:
+        return (await self.fetch_props(ActualGenerator.DC_2_CURRENT)) \
+            .get_entry_by_id(ActualGenerator.DC_2_CURRENT)
+
+    async def generator_dc_2_power(self) -> DxsEntry:
+        return (await self.fetch_props(ActualGenerator.DC_2_POWER)) \
+            .get_entry_by_id(ActualGenerator.generator_)
+
+    async def generator_dc_3_voltage(self) -> DxsEntry:
+        return (await self.fetch_props(ActualGenerator.DC_3_VOLTAGE)) \
+            .get_entry_by_id(ActualGenerator.DC_3_VOLTAGE)
+
+    async def generator_dc_3_current(self) -> DxsEntry:
+        return (await self.fetch_props(ActualGenerator.DC_3_CURRENT)) \
+            .get_entry_by_id(ActualGenerator.DC_3_CURRENT)
+
+    async def generator_dc_3_power(self) -> DxsEntry:
+        return (await self.fetch_props(ActualGenerator.DC_3_POWER)) \
+            .get_entry_by_id(ActualGenerator.DC_3_POWER)
+
+    async def s0_in_pulse_count(self) -> DxsEntry:
+        return (await self.fetch_props(ActualSZeroIn.S0_IN_PULSE_COUNT)) \
+            .get_entry_by_id(ActualSZeroIn.S0_IN_PULSE_COUNT)
+
+    async def s0_in_log_interval(self) -> DxsEntry:
+        return (await self.fetch_props(ActualSZeroIn.LOG_INTERVAL)) \
+            .get_entry_by_id(ActualSZeroIn.LOG_INTERVAL)
+
+    async def home_dc_power_pv(self) -> DxsEntry:
+        return (await self.fetch_props(Home.DC_POWER_PV)) \
+            .get_entry_by_id(Home.DC_POWER_PV)
+
+    async def home_ac_power(self) -> DxsEntry:
+        return (await self.fetch_props(Home.AC_POWER)) \
+            .get_entry_by_id(Home.AC_POWER)
+
+    async def home_own_consumption(self) -> DxsEntry:
+        return (await self.fetch_props(Home.OWN_CONSUMPTION)) \
+            .get_entry_by_id(Home.OWN_CONSUMPTION)
+
+    async def home_battery_state_of_charge(self) -> DxsEntry:
+        return (await self.fetch_props(Home.BATTERY_STATE_OF_CHARGE)) \
+            .get_entry_by_id(Home.BATTERY_STATE_OF_CHARGE)
+
+    async def inverter_operating_status(self) -> DxsEntry:
+        return (await self.fetch_props(Home.OPERATING_STATUS)) \
+            .get_entry_by_id(Home.OPERATING_STATUS)
+
+    async def inverter_name(self) -> DxsEntry:
+        return (await self.fetch_props(SettingsGeneral.INVERTER_NAME)) \
+            .get_entry_by_id(SettingsGeneral.INVERTER_NAME)
+
+    async def inverter_make(self) -> DxsEntry:
+        return (await self.fetch_props(SettingsGeneral.INVERTER_MAKE)) \
+            .get_entry_by_id(SettingsGeneral.INVERTER_MAKE)
+
+    async def version_ui(self) -> DxsEntry:
+        return (await self.fetch_props(InfoVersions.VERSION_UI)) \
+            .get_entry_by_id(InfoVersions.VERSION_UI)
+
+    async def version_fw(self) -> DxsEntry:
+        return (await self.fetch_props(InfoVersions.VERSION_FW)) \
+            .get_entry_by_id(InfoVersions.VERSION_FW)
+
+    async def version_hw(self) -> DxsEntry:
+        return (await self.fetch_props(InfoVersions.VERSION_HW)) \
+            .get_entry_by_id(InfoVersions.VERSION_HW)
+
+    async def version_par(self) -> DxsEntry:
+        return (await self.fetch_props(InfoVersions.VERSION_PAR)) \
+            .get_entry_by_id(InfoVersions.VERSION_PAR)
+
+    async def serial_nr(self) -> DxsEntry:
+        return (await self.fetch_props(InfoVersions.SERIAL_NUMBER)) \
+            .get_entry_by_id(InfoVersions.SERIAL_NUMBER)
+
+    async def article_nr(self) -> DxsEntry:
+        return (await self.fetch_props(InfoVersions.ARTICLE_NUMBER)) \
+            .get_entry_by_id(InfoVersions.ARTICLE_NUMBER)
+
+    async def country_settings_name(self) -> DxsEntry:
+        return (await self.fetch_props(InfoVersions.COUNTRY_SETTINGS_NAME)) \
+            .get_entry_by_id(InfoVersions.COUNTRY_SETTINGS_NAME)
+
+    async def country_settings_version(self) -> DxsEntry:
+        return (await self.fetch_props(InfoVersions.COUNTRY_SETTINGS_VERSION)) \
+            .get_entry_by_id(InfoVersions.COUNTRY_SETTINGS_VERSION)
+
     async def day_yield(self) -> DxsEntry:
         return (await self.fetch_props(StatisticDay.YIELD)) \
             .get_entry_by_id(StatisticDay.YIELD)
+
+    async def day_home_consumption(self) -> DxsEntry:
+        return (await self.fetch_props(StatisticDay.HOME_CONSUMPTION)) \
+            .get_entry_by_id(StatisticDay.HOME_CONSUMPTION)
+
+    async def day_self_consumption(self) -> DxsEntry:
+        return (await self.fetch_props(StatisticDay.SELF_CONSUMPTION)) \
+            .get_entry_by_id(StatisticDay.SELF_CONSUMPTION)
+
+    async def day_self_consumption_rate(self) -> DxsEntry:
+        return (await self.fetch_props(StatisticDay.SELF_CONSUMPTION_RATE)) \
+            .get_entry_by_id(StatisticDay.SELF_CONSUMPTION_RATE)
+
+    async def day_autonomy_degree(self) -> DxsEntry:
+        return (await self.fetch_props(StatisticDay.AUTONOMY_DEGREE)) \
+            .get_entry_by_id(StatisticDay.AUTONOMY_DEGREE)
+
+    async def total_yield(self) -> DxsEntry:
+        return (await self.fetch_props(StatisticTotal.YIELD)) \
+            .get_entry_by_id(StatisticTotal.YIELD)
+
+    async def total_home_consumption(self) -> DxsEntry:
+        return (await self.fetch_props(StatisticTotal.HOME_CONSUMPTION)) \
+            .get_entry_by_id(StatisticTotal.HOME_CONSUMPTION)
+
+    async def total_self_consumption(self) -> DxsEntry:
+        return (await self.fetch_props(StatisticTotal.SELF_CONSUMPTION)) \
+            .get_entry_by_id(StatisticTotal.SELF_CONSUMPTION)
+
+    async def total_self_consumption_rate(self) -> DxsEntry:
+        return (await self.fetch_props(StatisticTotal.SELF_CONSUMPTION_RATE)) \
+            .get_entry_by_id(StatisticTotal.SELF_CONSUMPTION_RATE)
+
+    async def total_autonomy_degree(self) -> DxsEntry:
+        return (await self.fetch_props(StatisticTotal.AUTONOMY_DEGREE)) \
+            .get_entry_by_id(StatisticTotal.AUTONOMY_DEGREE)
+
+    async def total_operating_time(self) -> DxsEntry:
+        return (await self.fetch_props(StatisticTotal.OPERATING_TIME)) \
+            .get_entry_by_id(StatisticTotal.OPERATING_TIME)
