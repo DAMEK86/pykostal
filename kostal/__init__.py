@@ -7,7 +7,7 @@ import async_timeout
 import asyncio
 import json
 
-from kostal import const
+from kostal.const import *
 
 DXS_ENDPOINT = "/api/dxs.json"
 LOG_DATA_ENDPOINT = "/LogDaten.dat"
@@ -98,7 +98,7 @@ class Piko:
 
     async def __fetch_data(self, request_params):
         """ fetch data """
-        auth=aiohttp.BasicAuth(self.__username, self.__password)
+        auth = aiohttp.BasicAuth(self.__username, self.__password)
         try:
             async with async_timeout.timeout(self.__timeout):
                 async with self.__client.get(self.__url,
@@ -114,10 +114,10 @@ class Piko:
             raise ValueError(
                 "Device returned a non-JSON reply at {}.".format(self.__url))
 
-    async def __fetch_dxs_entry(self, entry_id: []):
-        r = await self.__fetch_data({'dxsEntries': entry_id})
-        return DxsResponse(**r).get_entry_by_id(entry_id)
+    async def fetch_props(self, prop_ids: List):
+        response = await self.__fetch_data({'dxsEntries': prop_ids})
+        return DxsResponse(**response)
 
     async def day_yield(self):
-        entry = await self.__fetch_dxs_entry(const.StatisticDay['Yield'])
-        return entry.value
+        response = await self.fetch_props([StatisticDay.YIELD])
+        return response.get_entry_by_id(StatisticDay.YIELD).value
