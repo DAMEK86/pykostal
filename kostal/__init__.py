@@ -114,10 +114,102 @@ class Piko:
             raise ValueError(
                 "Device returned a non-JSON reply at {}.".format(self.__url))
 
-    async def fetch_props(self, prop_ids: List):
+    async def fetch_props(self, *prop_ids):
         response = await self.__fetch_data({'dxsEntries': prop_ids})
         return DxsResponse(**response)
 
-    async def day_yield(self):
-        response = await self.fetch_props([StatisticDay.YIELD])
-        return response.get_entry_by_id(StatisticDay.YIELD).value
+    async def analog_1(self) -> DxsEntry:
+        return (await self.fetch_props(ActualAnalogInputs.ANALOG1)) \
+            .get_entry_by_id(ActualAnalogInputs.ANALOG1)
+
+    async def analog_2(self) -> DxsEntry:
+        return (await self.fetch_props(ActualAnalogInputs.ANALOG2)) \
+            .get_entry_by_id(ActualAnalogInputs.ANALOG2)
+
+    async def analog_3(self) -> DxsEntry:
+        return (await self.fetch_props(ActualAnalogInputs.ANALOG3)) \
+            .get_entry_by_id(ActualAnalogInputs.ANALOG3)
+
+    async def analog_4(self) -> DxsEntry:
+        return (await self.fetch_props(ActualAnalogInputs.ANALOG4)) \
+            .get_entry_by_id(ActualAnalogInputs.ANALOG4)
+
+    async def battery_voltage(self) -> DxsEntry:
+        return (await self.fetch_props(ActualBattery.VOLTAGE)) \
+            .get_entry_by_id(ActualBattery.VOLTAGE)
+
+    async def battery_charge(self) -> DxsEntry:
+        return (await self.fetch_props(ActualBattery.CHARGE)) \
+            .get_entry_by_id(ActualBattery.CHARGE)
+
+    async def battery_current(self) -> DxsEntry:
+        return (await self.fetch_props(ActualBattery.CURRENT)) \
+            .get_entry_by_id(ActualBattery.CURRENT)
+
+    async def battery_current_dir(self) -> DxsEntry:
+        return (await self.fetch_props(ActualBattery.CURRENT_DIR)) \
+            .get_entry_by_id(ActualBattery.CURRENT_DIR)
+
+    async def battery_charge_cycles(self) -> DxsEntry:
+        return (await self.fetch_props(ActualBattery.CHARGE_CYCLES)) \
+            .get_entry_by_id(ActualBattery.CHARGE_CYCLES)
+
+    async def battery_temp(self) -> DxsEntry:
+        return (await self.fetch_props(ActualBattery.TEMPERATURE)) \
+            .get_entry_by_id(ActualBattery.TEMPERATURE)
+
+    async def grid_output_power(self) -> DxsEntry:
+        return (await self.fetch_props(ActualGrid.GRID_OUTPUT_POWER)) \
+            .get_entry_by_id(ActualGrid.GRID_OUTPUT_POWER)
+
+    async def grid_frequency(self) -> DxsEntry:
+        return (await self.fetch_props(ActualGrid.GRID_FREQ)) \
+            .get_entry_by_id(ActualGrid.GRID_FREQ)
+
+    async def grid_cos_phi(self) -> DxsEntry:
+        return (await self.fetch_props(ActualGrid.GRID_COS_PHI)) \
+            .get_entry_by_id(ActualGrid.GRID_COS_PHI)
+
+    async def grid_limitation(self) -> DxsEntry:
+        return (await self.fetch_props(ActualGrid.GRID_LIMITATION)) \
+            .get_entry_by_id(ActualGrid.GRID_LIMITATION)
+
+    async def grid_voltage_l1(self) -> DxsEntry:
+        return (await self.fetch_props(ActualGrid.GRID_VOLTAGE_L1)) \
+            .get_entry_by_id(ActualGrid.GRID_VOLTAGE_L1)
+
+    async def grid_current_l1(self) -> DxsEntry:
+        return (await self.fetch_props(ActualGrid.GRID_CURRENT_L1)) \
+            .get_entry_by_id(ActualGrid.GRID_CURRENT_L1)
+
+    async def grid_power_l1(self) -> DxsEntry:
+        return (await self.fetch_props(ActualGrid.GRID_POWER_L1)) \
+            .get_entry_by_id(ActualGrid.GRID_POWER_L1)
+
+    async def grid_voltage_l2(self) -> DxsEntry:
+        return (await self.fetch_props(ActualGrid.GRID_VOLTAGE_L2)) \
+            .get_entry_by_id(ActualGrid.GRID_VOLTAGE_L2)
+
+    async def grid_current_l2(self) -> DxsEntry:
+        return (await self.fetch_props(ActualGrid.GRID_CURRENT_L2)) \
+            .get_entry_by_id(ActualGrid.GRID_CURRENT_L2)
+
+    async def grid_power_l2(self) -> DxsEntry:
+        return (await self.fetch_props(ActualGrid.GRID_POWER_L2)) \
+            .get_entry_by_id(ActualGrid.GRID_POWER_L2)
+
+    async def grid_voltage_l3(self) -> DxsEntry:
+        return (await self.fetch_props(ActualGrid.GRID_VOLTAGE_L3)) \
+            .get_entry_by_id(ActualGrid.GRID_VOLTAGE_L3)
+
+    async def grid_current_l3(self) -> DxsEntry:
+        return (await self.fetch_props(ActualGrid.GRID_CURRENT_L3)) \
+            .get_entry_by_id(ActualGrid.GRID_CURRENT_L3)
+
+    async def grid_power_l3(self) -> DxsEntry:
+        return (await self.fetch_props(ActualGrid.GRID_POWER_L3)) \
+            .get_entry_by_id(ActualGrid.GRID_POWER_L3)
+
+    async def day_yield(self) -> DxsEntry:
+        return (await self.fetch_props(StatisticDay.YIELD)) \
+            .get_entry_by_id(StatisticDay.YIELD)
