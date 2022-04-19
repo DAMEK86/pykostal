@@ -2,12 +2,10 @@
 """Basic usage example and testing of kostal."""
 import asyncio
 import logging
-from operator import invert
-
 import aiohttp
 
 import kostal
-from kostal.const import ActualBattery, StatisticDay, StatisticTotal
+from kostal import ActualBattery
 
 
 async def main(loop, host):
@@ -15,7 +13,7 @@ async def main(loop, host):
         inverter = kostal.Piko(session, host)
 
         # Fetch single values
-        res = await inverter.day_yield()
+        res = await inverter.statisticDay.day_yield()
         print(f'day yield: {res.value}')
 
         # Or multiple values at once
