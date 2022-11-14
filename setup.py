@@ -9,7 +9,7 @@ with open('README.md', 'r') as fh:
 
 setup(
     name='pykostal',
-    version='0.0.1',
+    version='0.0.2',
     author='Andreas Rehn',
     author_email='rehn.andreas86@gmail.com',
     url='https://github.com/DAMEK86/pykostal',
