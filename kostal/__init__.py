@@ -3,7 +3,8 @@ import aiohttp
 import async_timeout
 import asyncio
 import json
-from typing import List
+import hashlib
+import base64
 
 from kostal.DxsApi import DxsResponse
 from kostal.ActualAnalogInputs import ActualAnalogInputs
@@ -21,6 +22,7 @@ from kostal.StatisticDay import StatisticDay
 from kostal.StatisticTotal import StatisticTotal
 
 DXS_ENDPOINT = "/api/dxs.json"
+LOGIN_ENDPOINT = "/api/login.json"
 LOG_DATA_ENDPOINT = "/LogDaten.dat"
 
 DEFAULT_USERNAME = 'pvserver'
@@ -28,7 +30,7 @@ DEFAULT_PASSWORD = 'pvwr'
 
 
 class Piko:
-    """ 
+    """
     Interface to communicate with the Kostal Piko over http request
     Attributes:
         session     The AIO session
@@ -51,6 +53,9 @@ class Piko:
         self.__username = username
         self.__password = password
         self.__timeout = timeout
+        self.__login_needed = True
+        self.__session_id = None
+        self.__url_login = url + LOGIN_ENDPOINT
 
         self.actualAnalogInputs = ActualAnalogInputs(self)
         self.actualBattery = ActualBattery(self)
@@ -66,15 +71,21 @@ class Piko:
 
     async def __fetch_data(self, request_params):
         """ fetch data """
-        auth = aiohttp.BasicAuth(self.__username, self.__password)
+        if self.__login_needed or self.__session_id is None:
+            await self.login()
+        if self.__session_id is not None:
+            request_params['sessionId'] = self.__session_id
         try:
             async with async_timeout.timeout(self.__timeout):
                 async with self.__client.get(self.__url,
                                              params=request_params,
-                                             auth=auth,
                                              timeout=self.__timeout) as resp:
                     assert resp.status == 200
-                    return await resp.json(content_type='text/plain')
+                    dataset = await resp.json(content_type='text/plain')
+                    if dataset.get('session', {}).get('roleId',0) == 0:
+                        self.__login_needed = True
+                        Warning("Session expired, re-login needed.")
+                    return dataset
         except (asyncio.TimeoutError, aiohttp.ClientError):
             raise ConnectionError(
                 "Connection to Kostal device failed at {}.".format(self.__url))
@@ -85,3 +96,42 @@ class Piko:
     async def fetch_props(self, *prop_ids):
         response = await self.__fetch_data({'dxsEntries': prop_ids})
         return DxsResponse(**response)
+
+    async def login(self):
+        """ Login to the Kostal Piko inverter """
+        self.__session_id = None
+        try:
+            async with async_timeout.timeout(self.__timeout):
+                async with self.__client.get(self.__url_login) as resp:
+                    if resp.status == 200:
+                        data = await resp.json(content_type=None)
+                        session_id = data.get('session', {}).get('sessionId',0)
+                        salt = data.get('salt')
+                combined = self.__password + salt  # Reihenfolge wie im JS
+                hash_value = hashlib.sha1(combined.encode("utf-8")).digest()
+                pwh = base64.b64encode(hash_value).decode()
+                data = {
+                    'mode': 1,
+                    'userId': self.__username,
+                    'pwh': pwh
+                }
+                async with self.__client.post(f"{self.__url_login}?sessionId={session_id}",
+                                              json=data) as resp:
+                    if resp.status == 200:
+                        data = await resp.json(content_type=None)
+                        if data.get('session', {}).get('roleId', 0) > 0:
+                            self.__login_needed = False
+                            self.__session_id = data.get('session', {}).get('sessionId', None)
+                            return True
+                        else:
+                            raise Warning("Login failed, invalid credentials.")
+                    else:
+                        raise Warning(
+                            "Login request failed with status {}".format(resp.status))
+
+        except (asyncio.TimeoutError, aiohttp.ClientError):
+            raise ConnectionError(
+                "Connection to Kostal device failed at {}.".format(self.__url))
+        except json.JSONDecodeError:
+            raise ValueError(
+                "Device returned a non-JSON reply at {}.".format(self.__url))
