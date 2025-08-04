@@ -38,7 +38,7 @@ class ActualGenerator:
 
     async def generator_dc_2_power(self) -> DxsEntry:
         return (await self.__inverter.fetch_props(self.DC_2_POWER)) \
-            .get_entry_by_id(self.generator_)
+            .get_entry_by_id(self.DC_2_POWER)
 
     async def generator_dc_3_voltage(self) -> DxsEntry:
         return (await self.__inverter.fetch_props(self.DC_3_VOLTAGE)) \
