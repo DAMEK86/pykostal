@@ -28,8 +28,8 @@ setup(
     ],
     python_requires='>=3',
     install_requires=[
-        'async_timeout',
-        'aiohttp'
+        'async_timeout>=4.0.0',
+        'aiohttp>=3.6.2'
     ],
     extras_require={
         "dev": [
