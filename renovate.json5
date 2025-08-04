@@ -1,0 +1,38 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "baseBranches": ["master"],
+  "extends": [
+    "config:recommended",
+    ":disableDependencyDashboard",
+    ":separateMajorReleases",
+    ":combinePatchMinorReleases",
+    ":ignoreUnstable",
+    ":prImmediately",
+    ":rebaseStalePrs"
+  ],
+  "labels": [
+    "dependencies",
+    "renovate"
+  ],
+  "schedule": null,
+  "constraints": {
+    "python": ">=3.7"
+  },
+  "packageRules": [
+    {
+      "description": "Group dependencies from pypi",
+      "matchDatasources": [
+        "pypi"
+      ],
+      "registryUrls": [
+        "https://pypi.org/simple"
+      ],
+      "groupName": "PyPi dependencies",
+      "groupSlug": "pypi-dependencies",
+      "labels": [
+        "pypi-updates"
+      ]
+    }
+  ],
+  "rebaseWhen": "behind-base-branch"
+}
