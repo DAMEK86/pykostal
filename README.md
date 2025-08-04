@@ -4,6 +4,8 @@
 ![PyPI - Python Version](https://img.shields.io/pypi/pyversions/pykostal.svg)
 [![PyPI - Status](https://img.shields.io/pypi/status/pykostal.svg)](https://pypi.org/project/pykostal/)
 
+**Python 3.8+ compatible** - Tested on Python 3.8, 3.9, 3.10, 3.11, and 3.12.
+
 Python module for [Kostal](https://www.kostal-solar-electric.com/) piko inverters supporting:
 
 - current-values
@@ -48,26 +50,48 @@ inverter = kostal.Piko(aiohttp.ClientSession(), url)
 
 ## Developing pykostal
 
-Initially run the following in your virtualenv:
+### Prerequisites
+- Python 3.8 or higher (tested up to Python 3.12)
+
+### Initial setup
+Run the following in your virtual environment:
 
 ```bash
-python setup.py bdist_wheel
+python -m build
 ```
 
-Everytime you update setup.py, run the following in your virtualenv:
+### Development installation
+Every time you update the project, run the following in your virtual environment:
 
 ```bash
 pip install -e .
 ```
 
-To install pykostal, along with the tools you need to develop and run tests, run the following in your virtualenv:
+To install pykostal along with the tools you need to develop and run tests, run the following in your virtual environment:
 
 ```bash
-pip install -e .[dev]
+pip install -e '.[dev]'
 ```
 
-## publishing
+### Running tests
+```bash
+pytest
+```
 
+### Testing across Python versions
+```bash
+tox
+```
+
+## Publishing
+
+### Modern approach (recommended)
+```bash
+python -m build
+twine upload dist/*
+```
+
+### Legacy approach
 ```bash
 python setup.py bdist_wheel sdist
 twine upload dist/*

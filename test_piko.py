@@ -1,7 +1,7 @@
 import kostal
 import json
 import asyncio
-
+from kostal.StatisticDay import StatisticDay
 
 def piko_statistic_day_yield():
     loop = asyncio.get_event_loop()
@@ -25,5 +25,5 @@ def test_json():
     # print the resp
     print("response:", resp)
     result = kostal.DxsResponse(**resp)
-    entry = result.get_entry_by_id(kostal.const.StatisticDay['Yield'])
+    entry = result.get_entry_by_id(StatisticDay.YIELD)
     print(entry.dxsId, 'corresponds to', entry.value)
