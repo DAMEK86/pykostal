@@ -1,0 +1,147 @@
+name: Release to PyPI
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version to release (e.g., 0.0.3)'
+        required: true
+        type: string
+      prerelease:
+        description: 'Is this a pre-release?'
+        required: false
+        default: false
+        type: boolean
+
+jobs:
+  validate-version:
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.validate.outputs.version }}
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Validate version format
+      id: validate
+      run: |
+        VERSION="${{ github.event.inputs.version }}"
+        if [[ ! $VERSION =~ ^[0-9]+\.[0-9]+\.[0-9]+(-[a-zA-Z0-9]+(\.[0-9]+)?)?$ ]]; then
+          echo "❌ Invalid version format: $VERSION"
+          echo "Version must follow semantic versioning (e.g., 0.0.3, 1.0.0, 1.0.0-alpha.1)"
+          exit 1
+        fi
+        echo "✅ Version format is valid: $VERSION"
+        echo "version=$VERSION" >> $GITHUB_OUTPUT
+
+  test:
+    runs-on: ubuntu-latest
+    needs: validate-version
+    strategy:
+      matrix:
+        python-version: ["3.9", "3.10", "3.11", "3.12", "3.13"]
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v4
+      with:
+        python-version: ${{ matrix.python-version }}
+        
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -e .[dev]
+        
+    - name: Run tests
+      run: pytest
+
+  build-and-publish:
+    runs-on: ubuntu-latest
+    needs: [validate-version, test]
+    environment: pypi-release
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+        
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: "3.12"
+        
+    - name: Install build dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install build twine
+        
+    - name: Update version in pyproject.toml
+      run: |
+        VERSION="${{ needs.validate-version.outputs.version }}"
+        sed -i 's/version = "[^"]*"/version = "'$VERSION'"/' pyproject.toml
+        echo "Updated version to: $VERSION"
+        
+    - name: Verify version update
+      run: |
+        grep "version.*${{ needs.validate-version.outputs.version }}" pyproject.toml
+        
+    - name: Build package
+      run: python -m build
+      
+    - name: Check package
+      run: |
+        python -m twine check dist/*
+        
+    - name: List built packages
+      run: |
+        echo "📦 Built packages:"
+        ls -la dist/
+        
+    - name: Publish to PyPI
+      env:
+        TWINE_USERNAME: __token__
+        TWINE_PASSWORD: ${{ secrets.PYPI_API_TOKEN }}
+      run: |
+        echo "🚀 Publishing to PyPI..."
+        python -m twine upload dist/*
+        
+    - name: Create Git tag
+      run: |
+        VERSION="${{ needs.validate-version.outputs.version }}"
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        git tag -a "v$VERSION" -m "Release version $VERSION"
+        git push origin "v$VERSION"
+        
+    - name: Create GitHub Release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: v${{ needs.validate-version.outputs.version }}
+        release_name: Release v${{ needs.validate-version.outputs.version }}
+        body: |
+          ## Release v${{ needs.validate-version.outputs.version }}
+          
+          🎉 New release of pykostal!
+          
+          ### Changes
+          - Please add your changelog here manually or automate it
+          
+          ### Installation
+          ```bash
+          pip install pykostal==${{ needs.validate-version.outputs.version }}
+          ```
+          
+          ### PyPI
+          This release is available on [PyPI](https://pypi.org/project/pykostal/${{ needs.validate-version.outputs.version }}/).
+        draft: false
+        prerelease: ${{ github.event.inputs.prerelease }}
+        
+    - name: Success notification
+      run: |
+        echo "🎉 Successfully released version ${{ needs.validate-version.outputs.version }} to PyPI!"
+        echo "📦 Package: https://pypi.org/project/pykostal/${{ needs.validate-version.outputs.version }}/"
+        echo "🏷️  Tag: v${{ needs.validate-version.outputs.version }}"
