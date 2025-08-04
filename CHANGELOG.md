@@ -7,8 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.0.4] - 2025-08-05
+
 ### Added
-- Add Changelog
+- Changelog with comprehensive project history
 - Python 3.12 and 3.13 support
 - Manual PyPI release pipeline with version input
 - Renovate dependency management
