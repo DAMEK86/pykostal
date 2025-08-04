@@ -10,7 +10,8 @@ readme = "README.md"
 requires-python = ">=3.9"
 license = "MIT"
 authors = [
-    {name = "Andreas Rehn", email = "rehn.andreas86@gmail.com"}
+    {name = "Andreas Rehn", email = "rehn.andreas86@gmail.com"},
+    {name = "David Scheidt", email = "scheidt.dav@gmail.com"}
 ]
 classifiers = [
     "Development Status :: 5 - Production/Stable",
