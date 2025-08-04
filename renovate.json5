@@ -1,6 +1,6 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "baseBranches": ["master"],
+  "baseBranchPatterns": ["master"],
   "extends": [
     "config:recommended",
     ":disableDependencyDashboard",
@@ -14,23 +14,28 @@
     "dependencies",
     "renovate"
   ],
-  "schedule": null,
-  "constraints": {
-    "python": ">=3.7"
-  },
   "packageRules": [
     {
-      "description": "Group dependencies from pypi",
-      "matchDatasources": [
-        "pypi"
+      "description": "Security updates with immediate creation",
+      "matchUpdateTypes": ["security"],
+      "groupName": null,
+      "dependencyDashboardApproval": false,
+      "minimumReleaseAge": null,
+      "commitMessageSuffix": "[SECURITY]",
+      "branchTopic": "{{{datasource}}}-{{{depNameSanitized}}}-vulnerability",
+      "prCreation": "immediate",
+      "schedule": ["at any time"]
+    },
+    {
+      "description": "Group Python dependencies from pyproject.toml",
+      "matchDatasources": ["pypi"],
+      "matchFileNames": [
+        "pyproject.toml"
       ],
-      "registryUrls": [
-        "https://pypi.org/simple"
-      ],
-      "groupName": "PyPi dependencies",
-      "groupSlug": "pypi-dependencies",
+      "groupName": "Python dependencies",
+      "groupSlug": "python-dependencies",
       "labels": [
-        "pypi-updates"
+        "python-updates"
       ]
     }
   ],

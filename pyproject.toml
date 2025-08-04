@@ -1,0 +1,40 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "pykostal"
+version = "0.0.2"
+description = "package to communicate with Kostal Piko inverters"
+readme = "README.md"
+requires-python = ">=3.7"
+license = {text = "MIT"}
+authors = [
+    {name = "Andreas Rehn", email = "rehn.andreas86@gmail.com"}
+]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.7",
+    "Programming Language :: Python :: 3.8",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+dependencies = [
+    "async_timeout>=4.0.0",
+    "aiohttp>=3.6.2"
+]
+
+[project.urls]
+Homepage = "https://github.com/DAMEK86/pykostal"
+Repository = "https://github.com/DAMEK86/pykostal"
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=3.7",
+    "twine",
+    "tox",
+]
+
+[tool.setuptools]
+packages = ["kostal"]
+py-modules = ["kostal"]
