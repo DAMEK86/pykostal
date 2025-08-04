@@ -1,0 +1,15 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": ["config:recommended"],
+  "enabledManagers": ["pip_requirements"],
+  "constraints": {
+    "python": "3.12"
+  },
+  "packageRules": [
+    {
+      "matchManagers": ["pip_requirements"],
+      "automerge": true,
+      "matchUpdateTypes": ["patch", "minor"]
+    }
+  ]
+}
