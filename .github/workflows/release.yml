@@ -27,7 +27,7 @@ jobs:
       version: ${{ steps.validate.outputs.version }}
     steps:
     - name: Checkout code
-      uses: actions/checkout@v4
+      uses: actions/checkout@v5
       
     - name: Validate version format
       id: validate
@@ -49,7 +49,7 @@ jobs:
         python-version: ["3.9", "3.10", "3.11", "3.12", "3.13"]
     steps:
     - name: Checkout code
-      uses: actions/checkout@v4
+      uses: actions/checkout@v5
       
     - name: Set up Python ${{ matrix.python-version }}
       uses: actions/setup-python@v5
@@ -69,7 +69,7 @@ jobs:
     needs: [validate-version, test]
     steps:
     - name: Checkout code
-      uses: actions/checkout@v4
+      uses: actions/checkout@v5
       with:
         fetch-depth: 0
         
@@ -131,7 +131,7 @@ jobs:
     needs: [validate-version, pypi-publish]
     steps:
     - name: Checkout code
-      uses: actions/checkout@v4
+      uses: actions/checkout@v5
       with:
         fetch-depth: 0  # Need full history for changelog generation
         
