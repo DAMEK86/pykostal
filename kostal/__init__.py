@@ -16,6 +16,8 @@ from kostal.ActualGrid import ActualGrid
 from kostal.ActualHome import ActualHome
 from kostal.ActualSZeroIn import ActualSZeroIn
 from kostal.Home import Home
+from kostal.InfoEvents import Event
+from kostal.InfoEvents import InfoEvents
 from kostal.InfoVersions import InfoVersions
 from kostal.SettingsGeneral import SettingsGeneral
 from kostal.StatisticDay import StatisticDay
@@ -64,6 +66,7 @@ class Piko:
         self.actualHome = ActualHome(self)
         self.actualSZeroIn = ActualSZeroIn(self)
         self.home = Home(self)
+        self.infoEvents = InfoEvents(self)
         self.infoVersions = InfoVersions(self)
         self.settingsGeneral = SettingsGeneral(self)
         self.statisticDay = StatisticDay(self)
