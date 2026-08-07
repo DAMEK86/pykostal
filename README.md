@@ -21,11 +21,11 @@ Python module for [Kostal](https://www.kostal-solar-electric.com/) piko inverter
   - day
   - log-data
   - total
+- events
 
 not supported:
 
 - all settings
-- events
 
 ongoing:
 
