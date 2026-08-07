@@ -151,37 +151,39 @@ jobs:
           COMMIT_RANGE="$LATEST_TAG..HEAD"
         fi
         
-        # Generate changelog using conventional commits
-        CHANGELOG=$(cat << 'EOF'
-        ## 🚀 Features
-        $(git log $COMMIT_RANGE --pretty=format:"- %s (%h)" --grep="^feat" | head -20)
+        # Generate changelog using conventional commits.
+        # Append a section only when it has entries.
+        add_section() {
+          local entries
+          entries=$(git log $COMMIT_RANGE --pretty=format:"- %s (%h)" --grep="$2" | head -n "$3" || true)
+          if [ -n "$entries" ]; then
+            printf '## %s\n%s\n\n' "$1" "$entries" >> changelog.md
+          fi
+        }
+
+        : > changelog.md
+        add_section "🚀 Features" "^feat" 20
+        add_section "🐛 Bug Fixes" "^fix" 20
+        add_section "📚 Documentation" "^docs" 10
+        add_section "🔧 Maintenance" "^chore\|^ci\|^build\|^refactor" 10
         
-        ## 🐛 Bug Fixes
-        $(git log $COMMIT_RANGE --pretty=format:"- %s (%h)" --grep="^fix" | head -20)
-        
-        ## 📚 Documentation
-        $(git log $COMMIT_RANGE --pretty=format:"- %s (%h)" --grep="^docs" | head -10)
-        
-        ## 🔧 Maintenance
-        $(git log $COMMIT_RANGE --pretty=format:"- %s (%h)" --grep="^chore\|^ci\|^build\|^refactor" | head -10)
-        
-        ## 🔄 Other Changes
-        $(git log $COMMIT_RANGE --pretty=format:"- %s (%h)" --invert-grep --grep="^feat\|^fix\|^docs\|^chore\|^ci\|^build\|^refactor" | head -10)
-        EOF
-        )
-        
-        # Clean up empty sections
-        CHANGELOG=$(echo "$CHANGELOG" | sed '/^## /N;/\n$/d' | sed 's/^$(git log.*)//')
+        # Everything not matched above
+        OTHERS=$(git log $COMMIT_RANGE --pretty=format:"- %s (%h)" --invert-grep --grep="^feat\|^fix\|^docs\|^chore\|^ci\|^build\|^refactor" | head -10 || true)
+        if [ -n "$OTHERS" ]; then
+          printf '## 🔄 Other Changes\n%s\n\n' "$OTHERS" >> changelog.md
+        fi
         
         # If no changes found, add a default message
-        if [ -z "$(echo "$CHANGELOG" | grep -v '^##')" ]; then
-          CHANGELOG="## Changes\n- Minor improvements and updates"
+        if [ ! -s changelog.md ]; then
+          printf '## Changes\n- Minor improvements and updates\n' > changelog.md
         fi
         
         # Save changelog to output
-        echo "changelog<<EOF" >> $GITHUB_OUTPUT
-        echo -e "$CHANGELOG" >> $GITHUB_OUTPUT
-        echo "EOF" >> $GITHUB_OUTPUT
+        {
+          echo "changelog<<EOF"
+          cat changelog.md
+          echo "EOF"
+        } >> $GITHUB_OUTPUT
         
     - name: Update CHANGELOG.md
       run: |

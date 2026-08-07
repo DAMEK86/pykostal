@@ -8,13 +8,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ## [0.2.0] - 2026-08-07
 
-## Changes
-- Minor improvements and updates
+### Added
+- Inverter event parsing (cdc68b5)
+
+### Changed
+- Project metadata: add author and update feature list (b4eeb7b)
 
 ## [0.1.0] - 2025-08-21
 
-## Changes
-- Minor improvements and updates
+### Changed
+- Login: BasicAuth is not supported by Kostal; authenticate via sessionId (get salt and sessionId, encrypt password with salt, post to login endpoint) (e39a74b)
+
+### Maintenance
+- Update renovatebot/github-action action to v43.0.8 (9ec13ec)
+- Update actions/download-artifact action to v5 (2319224)
+- Update actions/checkout action to v5 (253c15a)
+- Update dependency python to 3.13 (60498ec)
 
 
 ## [0.0.4] - 2025-08-05
